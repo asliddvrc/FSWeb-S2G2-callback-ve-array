@@ -5,13 +5,15 @@ const { fifaData } = require('./fifa.js')
 	Verilen datayı parçalayarak aşağıdaki verileri (console.log-ing) elde ederek pratik yapın. 
 	
 	💡 İPUCU: Öncelikle datayı filtrelemek isteyebilirsiniz */
+	const finalMaci2014=fifaData.filter(mac=>mac.Year==2014 && mac["Stage"]=="Final");
 
 //(a) 2014 Dünya kupası Finali Evsahibi takım ismi (dizide "Home Team Name" anahtarı)
+console.log(finalMaci2014[0]["Home Team Name"]);
 
 //(b) 2014 Dünya kupası Finali Deplasman takım ismi  (dizide "Away Team Name" anahtarı)
-
+console.log(finalMaci2014[0]["Away Team Name"]);
 //(c) 2014 Dünya kupası finali Ev sahibi takım golleri (dizide "Home Team Goals" anahtarı)
-
+console.log(finalMaci2014[0]["Home Team Goals"]);
 //(d)2014 Dünya kupası finali Deplasman takım golleri  (dizide "Away Team Goals" anahtarı)
 
 //(e) 2014 Dünya kupası finali kazananı*/
@@ -25,10 +27,14 @@ const { fifaData } = require('./fifa.js')
 	💡 İPUCU - verilen data içindeki nesnelerin(objects) "Stage" anahtarına bakmalısınız
 */
 
-function Finaller(/* kodlar buraya */) {
-	
-    /* kodlar buraya */
+function Finaller(dizi) {
+
+const maclar = dizi.filter((x) => x.Stage ==="Final" );
+
+return maclar;
 }
+console.log(Finaller(fifaData));
+
 
 
 
@@ -39,9 +45,12 @@ function Finaller(/* kodlar buraya */) {
 	3. Finaller data setindeki tüm yılları içeren "years" adındaki diziyi(array) döndürecek
 	*/
 
-function Yillar(/* kodlar buraya */) {
-	
-    /* kodlar buraya */
+function Yillar(data, callback) {
+	let yillar=callback(data).map(item=>{
+    return item.Year;
+	})
+	return yillar;
+	console.log(Yillar(fifaData,Finaller));
 }
 
 
@@ -53,11 +62,29 @@ function Yillar(/* kodlar buraya */) {
 	💡 İPUCU: Beraberlikler(ties) için şimdilik endişelenmeyin (Detaylı bilgi için README dosyasına bakabilirsiniz.)
 	4. Tüm kazanan ülkelerin isimlerini içeren `kazananlar` adında bir dizi(array) döndürecek(return)  */ 
 
-function Kazananlar(/* kodlar buraya */) {
+function Kazananlar(data,cbfin) {
+	let finaller=cbfin(data);
+	let kazananlar=[];
+
+
+	finaller.forEach(item=> {
+		if(item['Home Team Goals']>item['Away Team Goals']){
+			kazananlar.push(item['Home Team Goals']);
+		} else if (item['Away Team Goals']>item['Home Team Goals']){
+			kazananlar.push(item['AwaysTeam Name']);
+		} else { 
+			let kelimeler= item['Win conditions'].split("");
+			kazananlar.push(kelimeler[0]);
+		}
+		})
+		return kazananlar;
+
+	}
+		console.log(Kazananlar(fifaData, Finaller));
 	
-    /* kodlar buraya */
+
 	
-}
+
 
 
 
